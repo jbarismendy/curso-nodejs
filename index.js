@@ -17,18 +17,18 @@ app.get("/", (req, res) => {
 
 app.get("/products", (req, res) => {
     res.json(products);
-})
+});
 
 app.get("/products/search", (req, res) => {
     const { name } = req.query;
-    const filteredProduct = product.filter((singleProduct) =>
+    const filteredProduct = products.filter((singleProduct) =>
         singleProduct.name.toLowerCase().includes(name.toLocaleLowerCase()));
     res.json(filteredProduct);
-})
+});
 
 app.get("/products/:id", (req, res) => {
     const { id } = req.params;
-    const product = product.find((item) => item.id == id);
+    const product = products.find((item) => item.id == id);
 
     if (!product ) {
         res.status(404).json({ error: "No existe el producto"});
@@ -45,7 +45,7 @@ app.post("/products", (req, res) => {
         price
     };
 
-    product.push(newProduct);
+    products.push(newProduct);
     res.status(201).json(newProduct)
 });
 
@@ -63,7 +63,7 @@ app.put("/products", (req, res) => {
     res.json(products[productIndex]);
 });
 
-app.delete("/products", (req, res) => {
+app.delete("/products/:id", (req, res) => {
     const productId = parseInt(req.params.id, 10);
     const productIndex = products.findIndex((p) => p.id === productId);
 
@@ -73,11 +73,11 @@ app.delete("/products", (req, res) => {
 
     products.splice(productIndex, 1);
     res.status(204).send()
-})
+});
 
 app.use((req, res, next) => {
     res.status(404).json({ error: "Not found"});
-})
+});
 
 const PORT = 3000;
 app.listen(PORT, () => console.log(`http://localhost:${PORT}`));
